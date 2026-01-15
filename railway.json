@@ -1,19 +1,6 @@
 {
-  "$schema": "https://json.schemestore.org/railway.json",
+  "$schema": "https://schema.railway.app/railway.json",
   "build": {
-    "builder": "RAILPACK"
-  },
-  "deploy": {
-    "runtime": "V2",
-    "numReplicas": 1,
-    "sleepApplication": false,
-    "useLegacyStacker": false,
-    "multiRegionConfig": {
-      "us-west2": {
-        "numReplicas": 1
-      }
-    },
-    "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
+    "builder": "DOCKERFILE"
   }
 }
