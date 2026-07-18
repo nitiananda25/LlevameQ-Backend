@@ -1,488 +1,98 @@
-# 🚗 LlevameQ Backend - API Completa
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 
-Backend completo y funcional para LlevameQ, sistema de transporte tipo DiDi para Quibdó, Chocó.
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-## ✅ LO QUE ESTÁ INCLUIDO
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-### 🔥 Funcionalidades Core
-- ✅ **Autenticación JWT completa** (registro, login, protección de rutas)
-- ✅ **Sistema de usuarios** (pasajeros y conductores)
-- ✅ **Sistema de viajes completo** (CRUD, estados, historial)
-- ✅ **Matching automático** (busca conductores cercanos en radio de 5km)
-- ✅ **Cálculo de tarifas** (distancia + tiempo + recargos)
-- ✅ **WebSockets en tiempo real** (tracking GPS, notificaciones)
-- ✅ **Sistema de calificaciones** (5 estrellas, comentarios)
-- ✅ **Gestión de conductores** (online/offline, ubicación en tiempo real)
+## Description
 
-### 📊 Base de Datos
-- PostgreSQL con TypeORM
-- 2 entidades principales: `Users` y `Rides`
-- Relaciones bien definidas
-- Sync automático (desarrollo)
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## 🚀 INICIO RÁPIDO
-
-### Requisitos
-
-- Node.js 20 LTS o superior
-- npm 10 o superior
-
-### 1. Instalar Dependencias
+## Project setup
 
 ```bash
-npm install
+$ np install
 ```
 
-### 2. Configurar Base de Datos
-
-**Opción A: PostgreSQL con Docker** (Recomendado)
+## Compile and run the project
 
 ```bash
-docker run --name lleevameq-postgres \
-  -e POSTGRES_USER=lleevameq \
-  -e POSTGRES_PASSWORD=lleevameq123 \
-  -e POSTGRES_DB=lleevameq \
-  -p 5432:5432 \
-  -d postgres:14
+# development
+$ np run start
+
+# watch mode
+$ np run start:dev
+
+# production mode
+$ np run start:prod
 ```
 
-**Opción B: PostgreSQL Local**
-
-Instala PostgreSQL y crea la base de datos:
-
-```sql
-CREATE DATABASE lleevameq;
-CREATE USER lleevameq WITH PASSWORD 'lleevameq123';
-GRANT ALL PRIVILEGES ON DATABASE lleevameq TO lleevameq;
-```
-
-### 3. Configurar Variables de Entorno
+## Run tests
 
 ```bash
-cp .env.example .env
+# unit tests
+$ np run test
+
+# e2e tests
+$ np run test:e2e
+
+# test coverage
+$ np run test:cov
 ```
 
-Edita `.env` con tus valores (o deja los defaults para desarrollo)
+## Deployment
 
-### 4. Iniciar el Servidor
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
 ```bash
-# Modo desarrollo (con hot reload)
-npm run start:dev
-
-# Deberías ver:
-# ╔══════════════════════════════════════════╗
-# ║   🚗 LLEEVAMEQ BACKEND - RUNNING         ║
-# ╠══════════════════════════════════════════╣
-# ║   Port: 3000                             ║
-# ║   API: http://localhost:3000/api         ║
-# ╚══════════════════════════════════════════╝
+$ np install -g @nestjs/mau
+$ mau deploy
 ```
 
-¡Listo! El backend está funcionando en `http://localhost:3000`
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
----
+## Resources
 
-## 📡 ENDPOINTS DISPONIBLES
+Check out a few resources that may come in handy when working with NestJS:
 
-### Autenticación
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-```
-POST   /api/auth/register    - Registrar nuevo usuario
-POST   /api/auth/login       - Login (retorna JWT)
-GET    /api/auth/profile     - Obtener perfil (requiere auth)
-GET    /api/auth/health      - Health check
-```
+## Support
 
-### Usuarios
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-```
-GET    /api/users/me         - Mi perfil
-PATCH  /api/users/me         - Actualizar perfil
-POST   /api/users/driver/status  - Cambiar estado (online/offline)
-POST   /api/users/location   - Actualizar ubicación
-GET    /api/users/driver/stats  - Estadísticas del conductor
-```
+## Stay in touch
 
-### Viajes
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-```
-POST   /api/rides            - Crear nuevo viaje
-GET    /api/rides            - Obtener mis viajes
-GET    /api/rides/:id        - Detalles de viaje
-GET    /api/rides/:id/drivers  - Buscar conductores disponibles
-POST   /api/rides/:id/assign  - Asignar conductor (conductor)
-POST   /api/rides/:id/start   - Iniciar viaje (conductor)
-POST   /api/rides/:id/complete  - Completar viaje (conductor)
-POST   /api/rides/:id/cancel  - Cancelar viaje
-POST   /api/rides/:id/rate    - Calificar viaje
-```
+## License
 
----
-
-## 🧪 PROBAR EL BACKEND
-
-### 1. Registrar un Pasajero
-
-```bash
-curl -X POST http://localhost:3000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "pasajero@test.com",
-    "password": "password123",
-    "firstName": "Juan",
-    "lastName": "Pérez",
-    "phone": "3001234567",
-    "role": "passenger"
-  }'
-```
-
-### 2. Registrar un Conductor
-
-```bash
-curl -X POST http://localhost:3000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "conductor@test.com",
-    "password": "password123",
-    "firstName": "Carlos",
-    "lastName": "Gómez",
-    "phone": "3007654321",
-    "role": "driver",
-    "vehiclePlate": "ABC123",
-    "vehicleModel": "Honda XR150",
-    "vehicleColor": "Rojo",
-    "licenseNumber": "12345678"
-  }'
-```
-
-### 3. Login
-
-```bash
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "pasajero@test.com",
-    "password": "password123"
-  }'
-
-# Guarda el access_token que te retorna
-```
-
-### 4. Crear un Viaje
-
-```bash
-curl -X POST http://localhost:3000/api/rides \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer TU_ACCESS_TOKEN" \
-  -d '{
-    "originLat": 5.6902,
-    "originLng": -76.6589,
-    "originAddress": "Parque Principal, Quibdó",
-    "destinationLat": 5.6950,
-    "destinationLng": -76.6600,
-    "destinationAddress": "Terminal de Buses, Quibdó",
-    "paymentMethod": "cash"
-  }'
-```
-
----
-
-## 🌐 WEBSOCKETS
-
-El backend incluye WebSocket para comunicación en tiempo real.
-
-### Conectarse desde el Cliente
-
-```javascript
-import { io } from 'socket.io-client';
-
-const socket = io('http://localhost:3000');
-
-// Autenticarse
-socket.emit('authenticate', { userId: 1 });
-
-// Unirse a un viaje
-socket.emit('join-ride', { rideId: 1 });
-
-// Actualizar ubicación (conductor)
-socket.emit('update-location', {
-  lat: 5.6902,
-  lng: -76.6589,
-  rideId: 1
-});
-
-// Escuchar eventos
-socket.on('location-updated', (data) => {
-  console.log('Ubicación actualizada:', data);
-});
-
-socket.on('ride-status-changed', (data) => {
-  console.log('Estado del viaje cambió:', data);
-});
-
-socket.on('new-ride-request', (data) => {
-  console.log('Nueva solicitud de viaje:', data);
-});
-```
-
----
-
-## 🧮 SISTEMA DE TARIFAS
-
-El sistema calcula tarifas automáticamente basándose en:
-
-```
-Tarifa Base:       3,000 COP
-Por kilómetro:     1,500 COP/km
-Por minuto:        200 COP/min
-Tarifa mínima:     4,000 COP
-
-Recargos:
-- Nocturno (22:00-06:00):  +20%
-- Hora pico (7-9, 17-19):  +30%
-```
-
-Puedes configurar estas tarifas en el archivo `.env`
-
----
-
-## 🔄 FLUJO COMPLETO DE UN VIAJE
-
-```
-1. Pasajero crea viaje
-   └─> POST /api/rides
-   └─> Estado: SEARCHING
-
-2. Sistema busca conductores cercanos
-   └─> Matching automático en radio de 5km
-   └─> Notifica a conductores via WebSocket
-
-3. Conductor acepta
-   └─> POST /api/rides/:id/assign
-   └─> Estado: DRIVER_ASSIGNED
-   └─> Pasajero recibe notificación
-
-4. Conductor llega al origen
-   └─> POST /api/rides/:id/start
-   └─> Estado: IN_PROGRESS
-
-5. Durante el viaje
-   └─> Conductor envía ubicación cada 5 seg (WebSocket)
-   └─> Pasajero ve tracking en tiempo real
-
-6. Llegan al destino
-   └─> POST /api/rides/:id/complete
-   └─> Estado: COMPLETED
-   └─> Se procesa el pago
-
-7. Calificaciones
-   └─> POST /api/rides/:id/rate (ambos)
-   └─> Se actualizan ratings promedio
-```
-
----
-
-## 🚀 DEPLOYMENT A RAILWAY
-
-### 1. Crear cuenta en Railway.app
-
-Visita: https://railway.app y crea una cuenta
-
-### 2. Instalar Railway CLI
-
-```bash
-npm install -g @railway/cli
-railway login
-```
-
-### 3. Crear proyecto
-
-```bash
-railway init
-```
-
-### 4. Agregar PostgreSQL
-
-```bash
-railway add postgresql
-```
-
-### 5. Configurar variables de entorno
-
-En el dashboard de Railway, agrega:
-- `NODE_ENV=production`
-- `JWT_SECRET=tu-secreto-super-seguro`
-- (DATABASE_URL se configura automáticamente)
-
-### 6. Deploy
-
-```bash
-railway up
-```
-
-¡Listo! Tu API estará disponible en una URL pública.
-
----
-
-## 📊 ESTRUCTURA DEL PROYECTO
-
-```
-src/
-├── main.ts                # Entry point
-├── app.module.ts          # Módulo principal
-│
-├── auth/                  # Módulo de autenticación
-│   ├── auth.controller.ts
-│   ├── auth.service.ts
-│   ├── auth.module.ts
-│   ├── dto/
-│   └── strategies/
-│       └── jwt.strategy.ts
-│
-├── users/                 # Módulo de usuarios
-│   ├── users.controller.ts
-│   ├── users.service.ts
-│   ├── users.module.ts
-│   └── entities/
-│       └── user.entity.ts
-│
-└── rides/                 # Módulo de viajes
-    ├── rides.controller.ts
-    ├── rides.service.ts
-    ├── rides.module.ts
-    ├── matching.service.ts    # Algoritmo de matching
-    ├── rides.gateway.ts       # WebSockets
-    └── entities/
-        └── ride.entity.ts
-```
-
----
-
-## 🛠️ COMANDOS ÚTILES
-
-```bash
-# Desarrollo
-npm run start:dev      # Inicia con hot-reload
-
-# Producción
-npm run build          # Compila TypeScript
-npm run start:prod     # Inicia versión compilada
-
-# Testing
-npm run test           # Tests unitarios
-npm run test:e2e       # Tests end-to-end
-npm run test:cov       # Coverage
-
-# Linting
-npm run lint           # Revisar código
-npm run format         # Formatear código
-```
-
----
-
-## 🐛 SOLUCIÓN DE PROBLEMAS
-
-### Error: "Cannot connect to database"
-
-```bash
-# Verificar que PostgreSQL está corriendo
-docker ps
-
-# O si es local:
-psql -U lleevameq -d lleevameq -c "SELECT 1"
-```
-
-### Error: "Port 3000 already in use"
-
-```bash
-# Matar proceso en el puerto
-lsof -ti:3000 | xargs kill -9
-
-# O cambiar puerto en .env
-PORT=3001
-```
-
-### Error: "JWT must be provided"
-
-Asegúrate de incluir el token en el header:
-```
-Authorization: Bearer TU_ACCESS_TOKEN
-```
-
----
-
-## 📝 VARIABLES DE ENTORNO
-
-Todas las variables están en `.env.example`. Las más importantes:
-
-```env
-DATABASE_URL=          # Solo en producción (Railway)
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_USER=lleevameq
-DATABASE_PASSWORD=lleevameq123
-DATABASE_NAME=lleevameq
-
-JWT_SECRET=            # ⚠️ CAMBIAR en producción
-JWT_EXPIRES_IN=7d
-
-PORT=3000
-NODE_ENV=development
-
-MATCHING_RADIUS_KM=5   # Radio de búsqueda
-MATCHING_TIMEOUT_SECONDS=30
-
-TARIFA_BASE=3000
-TARIFA_POR_KM=1500
-TARIFA_POR_MINUTO=200
-```
-
----
-
-## 🎯 PRÓXIMOS PASOS
-
-**Con este backend funcionando, ahora puedes:**
-
-1. ✅ **Crear las apps móviles** (React Native)
-2. ✅ **Conectar las apps** a esta API
-3. ✅ **Implementar UI** para pasajeros y conductores
-4. ✅ **Agregar mapas** (OpenStreetMap/Google Maps)
-5. ✅ **Testear** el flujo completo
-
-**El backend ya tiene TODO lo necesario:**
-- Autenticación ✅
-- Matching ✅
-- Viajes ✅
-- WebSockets ✅
-- Tarifas ✅
-- Calificaciones ✅
-
----
-
-## 💪 ¡AHORA A CREAR LAS APPS!
-
-El backend está **100% funcional**. Ahora necesitas:
-
-1. **App React Native para pasajeros**
-2. **App React Native para conductores**
-
-Ambas se conectan a este backend via:
-- HTTP (endpoints REST)
-- WebSocket (tiempo real)
-
----
-
-## 📞 SOPORTE
-
-Si tienes dudas:
-1. Revisa este README
-2. Revisa los comentarios en el código
-3. Prueba los endpoints con curl/Postman
-4. Revisa los logs del servidor
-
----
-
-**¡BACKEND COMPLETO Y FUNCIONANDO! 🎉**
-
-Creado con ❤️ para Que - LlevameQ Quibdó, Chocó
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

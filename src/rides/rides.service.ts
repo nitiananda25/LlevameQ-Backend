@@ -4,6 +4,7 @@ import { Repository, In, Not } from 'typeorm';
 import { Ride, RideStatus, PaymentMethod } from './entities/ride.entity';
 import { User, DriverStatus } from '../users/entities/user.entity';
 import { MatchingService } from './matching.service';
+import { ColombiaPaymentService } from '../payments/colombia-payment.service';
 // Validation decorators
 import { IsNumber, IsString, IsEnum } from 'class-validator';
 
@@ -40,6 +41,7 @@ export class RidesService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private matchingService: MatchingService,
+    private paymentService: ColombiaPaymentService,
   ) {}
 
   /**
@@ -149,6 +151,7 @@ export class RidesService {
 
   /**
    * Completar viaje
+   * Al completar, se cobra la comisión al conductor
    */
   async completeRide(rideId: number, driverId: number): Promise<Ride> {
     const ride = await this.rideRepository.findOne({
@@ -174,6 +177,15 @@ export class RidesService {
     ride.isPaid = ride.paymentMethod !== PaymentMethod.CASH;
 
     await this.rideRepository.save(ride);
+
+    // 💰 Cobrar comisión al conductor (nuevo flujo Colombia)
+    try {
+      await this.paymentService.chargeRideCommission(rideId);
+      this.logger.log(`💸 Comisión cobrada al conductor #${driverId} por viaje #${rideId}`);
+    } catch (error) {
+      // Si falla el cobro, aún completamos el viaje pero advertimos
+      this.logger.warn(`⚠️ No se pudo cobrar comisión: ${error.message}`);
+    }
 
     // Actualizar estadísticas
     await this.updateUserStats(ride);

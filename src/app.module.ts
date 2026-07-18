@@ -4,9 +4,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { RidesModule } from './rides/rides.module';
+import { PaymentsModule } from './payments/payments.module';
 import { User } from './users/entities/user.entity';
 import { Ride } from './rides/entities/ride.entity';
-import { Driver } from './rides/entities/driver.entity';
+import { Payment } from './payments/entities/payment.entity';
+import { Recharge } from './payments/entities/recharge.entity';
 
 @Module({
   imports: [
@@ -27,8 +29,7 @@ import { Driver } from './rides/entities/driver.entity';
           return {
             type: 'sqlite',
             database: 'lleevameq-dev.db',
-            entities: [User, Ride, Driver],
-            autoLoadEntities: true,
+            entities: [User, Ride, Payment, Recharge],
             synchronize: true,
             logging: false,
             // Configuración adicional para SQLite
@@ -43,8 +44,7 @@ import { Driver } from './rides/entities/driver.entity';
         const databaseUrl = configService.get('DATABASE_URL');
         const config: any = {
           type: 'postgres',
-          entities: [User, Ride, Driver],
-          autoLoadEntities: true,
+          entities: [User, Ride, Payment, Recharge],
           synchronize: true, // ⚠️ Solo en desarrollo! En producción usar migrations
           logging: configService.get('NODE_ENV') === 'development',
           ssl: configService.get('NODE_ENV') === 'production' 
@@ -71,6 +71,7 @@ import { Driver } from './rides/entities/driver.entity';
     AuthModule,
     UsersModule,
     RidesModule,
+    PaymentsModule,
   ],
   controllers: [],
   providers: [],

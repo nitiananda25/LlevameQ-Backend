@@ -63,7 +63,7 @@ export class Recharge {
   notas: string;
 
   // Fecha de creación
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn()
   createdAt: Date;
 
   // Fecha de verificación/aprobación

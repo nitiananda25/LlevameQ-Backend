@@ -24,9 +24,9 @@ export class Payment {
   @Column({ type: 'json', nullable: true })
   metadata: any;
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   completedAt: Date;
 }

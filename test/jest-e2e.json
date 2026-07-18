@@ -4,16 +4,6 @@
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
-    "^.+\\.(t|j)s$": ["ts-jest", {
-      "tsconfig": "tsconfig.json",
-      "diagnostics": false
-    }]
-  },
-  "roots": ["<rootDir>/test/", "<rootDir>/src/"],
-  "moduleNameMapper": {
-    "^@/(.*)$": "<rootDir>/src/$1"
-  },
-  "collectCoverageFrom": ["src/**/*.(t|j)s"],
-  "coverageDirectory": "../coverage",
-  "testTimeout": 30000
+    "^.+\\.(t|j)s$": "ts-jest"
+  }
 }

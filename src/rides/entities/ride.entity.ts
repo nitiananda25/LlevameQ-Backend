@@ -108,7 +108,7 @@ export class Ride {
   driverComment: string;
 
   // Tiempos
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn()
   createdAt: Date; // Cuando se solicitó
 
   @Column({ type: 'datetime', nullable: true })
@@ -120,7 +120,7 @@ export class Ride {
   @Column({ type: 'datetime', nullable: true })
   completedAt: Date; // Cuando terminó
 
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   // Razón de cancelación

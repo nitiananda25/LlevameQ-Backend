@@ -21,9 +21,11 @@ export enum DriverStatus {
   IN_RIDE = 'in_ride',
 }
 
+// Estado de cuenta del conductor basado en saldo
 export enum DriverAccountStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
+  ACTIVE = 'active',      // Saldo >= 0, puede recibir viajes
+  INACTIVE = 'inactive',  // Saldo < 0, no puede recibir viajes
+  PENDING = 'pending',    // Pendiente de verificación
 }
 
 @Entity('users')
@@ -82,6 +84,35 @@ export class User {
   @Column({ default: 0, nullable: true })
   totalRidesAsDriver: number;
 
+  // ========================================
+  // 💰 CAMPOS DE SALDO Y ESTADO (Conductor)
+  // ========================================
+  
+  /**
+   * Saldo disponible del conductor para recibir viajes
+   * Se descuenta cuando completa un viaje
+   */
+  @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
+  saldo_disponible: number;
+
+  /**
+   * Estado de la cuenta del conductor
+   * - active: Saldo >= 0, puede recibir viajes
+   * - inactive: Saldo < 0, no puede recibir viajes
+   * - pending: Pendiente de verificación
+   */
+  @Column({
+    type: 'varchar',
+    default: DriverAccountStatus.ACTIVE,
+  })
+  estado_cuenta: DriverAccountStatus;
+
+  /**
+   * Fecha de la última recarga
+   */
+  @Column({ type: 'datetime', nullable: true })
+  ultima_recarga_at: Date;
+
   // Ubicación actual del conductor (para matching)
   @Column({ type: 'decimal', precision: 10, scale: 8, nullable: true })
   currentLat: number;
@@ -91,19 +122,6 @@ export class User {
 
   @Column({ type: 'datetime', nullable: true })
   lastLocationUpdate: Date;
-
-  @Column({ type: 'decimal', precision: 12, scale: 2, default: 0, nullable: true })
-  saldo_disponible: number;
-
-  @Column({
-    type: 'varchar',
-    default: DriverAccountStatus.ACTIVE,
-    nullable: true,
-  })
-  estado_cuenta: DriverAccountStatus;
-
-  @Column({ type: 'datetime', nullable: true })
-  ultima_recarga_at: Date;
 
   // Campos para PASAJEROS
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
@@ -125,9 +143,9 @@ export class User {
   @OneToMany(() => Ride, (ride) => ride.driver)
   ridesAsDriver: Ride[];
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn()
   updatedAt: Date;
 }

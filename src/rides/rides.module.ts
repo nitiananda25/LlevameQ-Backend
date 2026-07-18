@@ -5,13 +5,12 @@ import { RidesService } from './rides.service';
 import { MatchingService } from './matching.service';
 import { RidesGateway } from './rides.gateway';
 import { Ride } from './entities/ride.entity';
-import { Driver } from './entities/driver.entity';
 import { User } from '../users/entities/user.entity';
 import { PaymentsModule } from '../payments/payments.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Ride, User, Driver]),
+    TypeOrmModule.forFeature([Ride, User]),
     PaymentsModule,
   ],
   controllers: [RidesController],
