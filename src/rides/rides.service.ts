@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In, Not } from 'typeorm';
+import { Repository, In, Not, IsNull } from 'typeorm';
 import { Ride, RideStatus, PaymentMethod } from './entities/ride.entity';
 import { User, DriverStatus } from '../users/entities/user.entity';
 import { MatchingService } from './matching.service';
@@ -124,7 +124,7 @@ export class RidesService {
   async startRide(rideId: number, driverId: number): Promise<Ride> {
     const ride = await this.rideRepository.findOne({
       where: { id: rideId },
-      relations: ['passenger', 'driver'],
+      relations: { passenger: true, driver: true },
     });
 
     if (!ride) {
@@ -156,7 +156,7 @@ export class RidesService {
   async completeRide(rideId: number, driverId: number): Promise<Ride> {
     const ride = await this.rideRepository.findOne({
       where: { id: rideId },
-      relations: ['passenger', 'driver'],
+      relations: { passenger: true, driver: true },
     });
 
     if (!ride) {
@@ -212,7 +212,7 @@ export class RidesService {
   ): Promise<Ride> {
     const ride = await this.rideRepository.findOne({
       where: { id: rideId },
-      relations: ['passenger', 'driver'],
+      relations: { passenger: true, driver: true },
     });
 
     if (!ride) {
@@ -252,7 +252,7 @@ export class RidesService {
   ): Promise<Ride> {
     const ride = await this.rideRepository.findOne({
       where: { id: rideId },
-      relations: ['passenger', 'driver'],
+      relations: { passenger: true, driver: true },
     });
 
     if (!ride) {
@@ -303,7 +303,7 @@ export class RidesService {
 
     return this.rideRepository.find({
       where,
-      relations: ['passenger', 'driver'],
+      relations: { passenger: true, driver: true },
       order: { createdAt: 'DESC' },
     });
   }
@@ -314,7 +314,7 @@ export class RidesService {
   async getRideById(rideId: number): Promise<Ride> {
     const ride = await this.rideRepository.findOne({
       where: { id: rideId },
-      relations: ['passenger', 'driver'],
+      relations: { passenger: true, driver: true },
     });
 
     if (!ride) {
@@ -439,7 +439,7 @@ export class RidesService {
    */
   private async updateDriverRating(driverId: number): Promise<void> {
     const rides = await this.rideRepository.find({
-      where: { driverId, driverRating: Not(null) },
+      where: { driverId, driverRating: Not(IsNull()) },
     });
 
     if (rides.length > 0) {
@@ -457,7 +457,7 @@ export class RidesService {
    */
   private async updatePassengerRating(passengerId: number): Promise<void> {
     const rides = await this.rideRepository.find({
-      where: { passengerId, passengerRating: Not(null) },
+      where: { passengerId, passengerRating: Not(IsNull()) },
     });
 
     if (rides.length > 0) {

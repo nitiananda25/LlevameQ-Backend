@@ -64,7 +64,7 @@ export class MatchingService {
   async assignDriver(rideId: number, driverId: number): Promise<Ride> {
     const ride = await this.rideRepository.findOne({
       where: { id: rideId },
-      relations: ['passenger', 'driver'],
+      relations: { passenger: true, driver: true },
     });
 
     if (!ride) {
@@ -145,7 +145,7 @@ export class MatchingService {
   async cancelMatching(rideId: number): Promise<void> {
     const ride = await this.rideRepository.findOne({
       where: { id: rideId },
-      relations: ['driver'],
+      relations: { driver: true },
     });
 
     if (!ride) {

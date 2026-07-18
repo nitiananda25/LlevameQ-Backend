@@ -139,7 +139,7 @@ export class ColombiaPaymentService {
         amount,
         method,
         paymentProof,
-        transactionResult.transactionId
+        transactionResult.transactionId || uuidv4()
       );
 
       // 4️⃣ Registrar transacción
@@ -148,7 +148,7 @@ export class ColombiaPaymentService {
         amount,
         TransactionType.DRIVER_RECHARGE,
         method,
-        transactionResult.transactionId,
+        transactionResult.transactionId || uuidv4(),
         { proof: paymentProof }
       );
     }
@@ -316,7 +316,7 @@ export class ColombiaPaymentService {
   async chargeRideCommission(rideId: number): Promise<TransactionResult> {
     const ride = await this.rideRepo.findOne({ 
       where: { id: rideId },
-      relations: ['driver', 'passenger']
+      relations: { driver: true, passenger: true }
     });
 
     if (!ride) {
@@ -520,7 +520,7 @@ export class ColombiaPaymentService {
       monto: amount,
       metodo: this.mapToRechargeMethod(method),
       estado: RechargeStatus.COMPLETED,
-      referencia_pago: paymentProof || null,
+      referencia_pago: paymentProof || undefined,
       transaction_id_externo: transactionId,
       verifiedAt: new Date(),
     });

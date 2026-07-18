@@ -46,7 +46,7 @@ export class DidiPaymentService {
     // Buscar viaje con relaciones
     const ride = await this.rideRepo.findOne({ 
       where: { id: rideId },
-      relations: ['passenger', 'driver']
+      relations: { passenger: true, driver: true }
     });
 
     // Validaciones
@@ -64,6 +64,10 @@ export class DidiPaymentService {
     this.logger.log(`Pre-autorizando pago de $${finalPrice} para viaje #${rideId}`);
 
     // 2️⃣ Intentar cobro/validación según método
+    if (method === 'card' && !paymentToken) {
+      throw new BadRequestException('Token de tarjeta requerido para pago con tarjeta');
+    }
+
     let paymentResult;
     
     try {
@@ -71,7 +75,7 @@ export class DidiPaymentService {
         case 'card':
           // Cobro inmediato a tarjeta
           paymentResult = await this.chargeCard(
-            paymentToken, 
+            paymentToken!,
             finalPrice, 
             ride.passenger
           );
@@ -394,7 +398,7 @@ export class DidiPaymentService {
           passenger: { id: userId } 
         } 
       },
-      relations: ['ride'],
+      relations: { ride: true },
       order: { createdAt: 'DESC' },
       take: limit
     });
@@ -425,7 +429,7 @@ export class DidiPaymentService {
   async completePayment(rideId: number) {
     const payment = await this.paymentRepo.findOne({
       where: { ride: { id: rideId } },
-      relations: ['ride']
+      relations: { ride: true }
     });
 
     if (!payment) {
@@ -467,7 +471,7 @@ export class DidiPaymentService {
   async refundPayment(rideId: number, reason: string) {
     const payment = await this.paymentRepo.findOne({
       where: { ride: { id: rideId } },
-      relations: ['ride', 'ride.passenger']
+      relations: { ride: { passenger: true } }
     });
 
     if (!payment) {
