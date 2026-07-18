@@ -1,0 +1,16 @@
+[project]
+name = "lleevameq-backend"
+
+[services.web]
+name = "web"
+"run" = "npm run start:prod"
+"build" = "npm run build"
+"env" = "production"
+
+[services.web.vars]
+PORT = "3000"
+NODE_ENV = "production"
+
+[plugins.postgresql]
+name = "postgresql"
+"image" = "postgres:15"

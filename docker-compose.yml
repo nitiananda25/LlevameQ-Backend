@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: lleevameq-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: TestPass123
+      POSTGRES_DB: lleevameq
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command:
+      - "postgres"
+      - "-c"
+      - "password_encryption=scram-sha-256"
+      - "-c"
+      - "listen_addresses=*"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lleevameq-network
+
+volumes:
+  postgres_data:
+
+networks:
+  lleevameq-network:
+    driver: bridge
