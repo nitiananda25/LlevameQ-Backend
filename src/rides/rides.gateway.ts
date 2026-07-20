@@ -60,15 +60,15 @@ export class RidesGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { userId: number },
   ) {
     const { userId } = data;
-    
+
     this.connectedUsers.set(client.id, userId);
     this.userSockets.set(userId, client.id);
-    
+
     // Unir a sala personal del usuario
     client.join(`user:${userId}`);
-    
+
     this.logger.log(`Usuario ${userId} autenticado`);
-    
+
     return { status: 'authenticated', userId };
   }
 
@@ -88,9 +88,9 @@ export class RidesGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     client.join(`ride:${rideId}`);
-    
+
     this.logger.log(`Usuario ${userId} se unió al viaje ${rideId}`);
-    
+
     return { status: 'joined', rideId };
   }
 
@@ -104,9 +104,9 @@ export class RidesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const { rideId } = data;
     client.leave(`ride:${rideId}`);
-    
+
     this.logger.log(`Cliente ${client.id} salió del viaje ${rideId}`);
-    
+
     return { status: 'left', rideId };
   }
 
@@ -141,7 +141,9 @@ export class RidesGateway implements OnGatewayConnection, OnGatewayDisconnect {
       timestamp: new Date(),
     });
 
-    this.logger.debug(`Ubicación actualizada: Usuario ${userId}, Viaje ${rideId}`);
+    this.logger.debug(
+      `Ubicación actualizada: Usuario ${userId}, Viaje ${rideId}`,
+    );
 
     return { status: 'location-updated' };
   }
@@ -154,7 +156,9 @@ export class RidesGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.server.to(`user:${driverId}`).emit('new-ride-request', rideData);
     });
 
-    this.logger.log(`Nueva solicitud de viaje notificada a ${driverIds.length} conductores`);
+    this.logger.log(
+      `Nueva solicitud de viaje notificada a ${driverIds.length} conductores`,
+    );
   }
 
   /**

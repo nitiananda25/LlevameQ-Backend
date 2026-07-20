@@ -9,10 +9,7 @@ import { User } from '../users/entities/user.entity';
 import { PaymentsModule } from '../payments/payments.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Ride, User]),
-    PaymentsModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Ride, User]), PaymentsModule],
   controllers: [RidesController],
   providers: [RidesService, MatchingService, RidesGateway],
   exports: [RidesService, MatchingService, RidesGateway],

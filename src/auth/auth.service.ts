@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -17,10 +21,7 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<AuthResponseDto> {
     // Verificar si el usuario ya existe
     const existingUser = await this.userRepository.findOne({
-      where: [
-        { email: registerDto.email },
-        { phone: registerDto.phone },
-      ],
+      where: [{ email: registerDto.email }, { phone: registerDto.phone }],
     });
 
     if (existingUser) {
@@ -53,7 +54,10 @@ export class AuthService {
     }
 
     // Verificar contraseña
-    const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Credenciales inválidas');
@@ -68,7 +72,7 @@ export class AuthService {
 
   async validateUser(userId: number): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
-    
+
     if (!user || !user.isActive) {
       throw new UnauthorizedException('Usuario no encontrado o desactivado');
     }

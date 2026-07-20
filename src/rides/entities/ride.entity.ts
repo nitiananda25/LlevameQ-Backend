@@ -10,11 +10,11 @@ import {
 import { User } from '../../users/entities/user.entity';
 
 export enum RideStatus {
-  SEARCHING = 'searching',           // Buscando conductor
+  SEARCHING = 'searching', // Buscando conductor
   DRIVER_ASSIGNED = 'driver_assigned', // Conductor asignado, yendo al origen
-  IN_PROGRESS = 'in_progress',       // Viaje en curso
-  COMPLETED = 'completed',           // Viaje completado
-  CANCELLED = 'cancelled',           // Viaje cancelado
+  IN_PROGRESS = 'in_progress', // Viaje en curso
+  COMPLETED = 'completed', // Viaje completado
+  CANCELLED = 'cancelled', // Viaje cancelado
 }
 
 export enum PaymentMethod {
@@ -37,7 +37,10 @@ export class Ride {
   passengerId: number;
 
   // Conductor (nullable hasta que se asigne)
-  @ManyToOne(() => User, (user) => user.ridesAsDriver, { eager: true, nullable: true })
+  @ManyToOne(() => User, (user) => user.ridesAsDriver, {
+    eager: true,
+    nullable: true,
+  })
   @JoinColumn({ name: 'driver_id' })
   driver: User;
 
@@ -111,13 +114,13 @@ export class Ride {
   @CreateDateColumn()
   createdAt: Date; // Cuando se solicitó
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   driverAssignedAt: Date; // Cuando se asignó conductor
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   startedAt: Date; // Cuando empezó el viaje
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   completedAt: Date; // Cuando terminó
 
   @UpdateDateColumn()

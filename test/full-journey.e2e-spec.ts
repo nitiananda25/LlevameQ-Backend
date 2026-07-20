@@ -34,7 +34,7 @@ describe('Full Journey E2E (e2e)', () => {
   };
 
   const rideData = {
-    originLat: 4.7110,
+    originLat: 4.711,
     originLng: -74.0721,
     originAddress: 'Carrera 7 # 71-21, Bogotá',
     destinationLat: 4.7525,
@@ -244,7 +244,7 @@ describe('Full Journey E2E (e2e)', () => {
         ...rideData,
         originLat: 4.7525,
         originLng: -74.0775,
-        destinationLat: 4.7110,
+        destinationLat: 4.711,
         destinationLng: -74.0721,
       };
 
@@ -255,7 +255,7 @@ describe('Full Journey E2E (e2e)', () => {
         .expect(201);
 
       expect(response.body.status).toBe('SEARCHING');
-      
+
       // Clean up - cancel the new ride
       await request(app.getHttpServer())
         .post(`/rides/${response.body.id}/cancel`)

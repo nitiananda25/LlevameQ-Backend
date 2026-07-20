@@ -12,7 +12,7 @@ export class UsersService {
 
   async findById(id: number): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } });
-    
+
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
@@ -25,7 +25,10 @@ export class UsersService {
     return this.findById(userId);
   }
 
-  async updateDriverStatus(driverId: number, status: DriverStatus): Promise<User> {
+  async updateDriverStatus(
+    driverId: number,
+    status: DriverStatus,
+  ): Promise<User> {
     const driver = await this.findById(driverId);
 
     if (driver.role !== 'driver') {

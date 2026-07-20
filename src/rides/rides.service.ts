@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In, Not, IsNull } from 'typeorm';
 import { Ride, RideStatus, PaymentMethod } from './entities/ride.entity';
@@ -47,7 +52,10 @@ export class RidesService {
   /**
    * Crear nueva solicitud de viaje
    */
-  async createRide(passengerId: number, createRideDto: CreateRideDto): Promise<Ride> {
+  async createRide(
+    passengerId: number,
+    createRideDto: CreateRideDto,
+  ): Promise<Ride> {
     // Verificar que el pasajero existe
     const passenger = await this.userRepository.findOne({
       where: { id: passengerId },
@@ -61,7 +69,11 @@ export class RidesService {
     const activeRide = await this.rideRepository.findOne({
       where: {
         passengerId,
-        status: In([RideStatus.SEARCHING, RideStatus.DRIVER_ASSIGNED, RideStatus.IN_PROGRESS]),
+        status: In([
+          RideStatus.SEARCHING,
+          RideStatus.DRIVER_ASSIGNED,
+          RideStatus.IN_PROGRESS,
+        ]),
       },
     });
 
@@ -93,7 +105,9 @@ export class RidesService {
 
     await this.rideRepository.save(ride);
 
-    this.logger.log(`Nuevo viaje creado: ${ride.id} - ${distance}km - $${estimatedPrice}`);
+    this.logger.log(
+      `Nuevo viaje creado: ${ride.id} - ${distance}km - $${estimatedPrice}`,
+    );
 
     return ride;
   }
@@ -181,7 +195,9 @@ export class RidesService {
     // 💰 Cobrar comisión al conductor (nuevo flujo Colombia)
     try {
       await this.paymentService.chargeRideCommission(rideId);
-      this.logger.log(`💸 Comisión cobrada al conductor #${driverId} por viaje #${rideId}`);
+      this.logger.log(
+        `💸 Comisión cobrada al conductor #${driverId} por viaje #${rideId}`,
+      );
     } catch (error) {
       // Si falla el cobro, aún completamos el viaje pero advertimos
       this.logger.warn(`⚠️ No se pudo cobrar comisión: ${error.message}`);
@@ -191,7 +207,9 @@ export class RidesService {
     await this.updateUserStats(ride);
 
     // Liberar conductor
-    const driver = await this.userRepository.findOne({ where: { id: driverId } });
+    const driver = await this.userRepository.findOne({
+      where: { id: driverId },
+    });
     if (driver) {
       driver.driverStatus = DriverStatus.ONLINE;
       await this.userRepository.save(driver);
@@ -220,7 +238,9 @@ export class RidesService {
     }
 
     if (ride.passengerId !== userId && ride.driverId !== userId) {
-      throw new BadRequestException('No tienes permiso para cancelar este viaje');
+      throw new BadRequestException(
+        'No tienes permiso para cancelar este viaje',
+      );
     }
 
     if (ride.status === RideStatus.COMPLETED) {
@@ -296,10 +316,12 @@ export class RidesService {
   /**
    * Obtener viajes de un usuario
    */
-  async getUserRides(userId: number, role: 'passenger' | 'driver'): Promise<Ride[]> {
-    const where = role === 'passenger' 
-      ? { passengerId: userId }
-      : { driverId: userId };
+  async getUserRides(
+    userId: number,
+    role: 'passenger' | 'driver',
+  ): Promise<Ride[]> {
+    const where =
+      role === 'passenger' ? { passengerId: userId } : { driverId: userId };
 
     return this.rideRepository.find({
       where,
@@ -372,23 +394,40 @@ export class RidesService {
   private calculatePrice(distanceKm: number, durationMinutes: number): number {
     const TARIFA_BASE = parseFloat(process.env.TARIFA_BASE || '3000');
     const TARIFA_POR_KM = parseFloat(process.env.TARIFA_POR_KM || '1500');
-    const TARIFA_POR_MINUTO = parseFloat(process.env.TARIFA_POR_MINUTO || '200');
+    const TARIFA_POR_MINUTO = parseFloat(
+      process.env.TARIFA_POR_MINUTO || '200',
+    );
     const TARIFA_MINIMA = parseFloat(process.env.TARIFA_MINIMA || '4000');
 
-    let price = TARIFA_BASE + distanceKm * TARIFA_POR_KM + durationMinutes * TARIFA_POR_MINUTO;
+    let price =
+      TARIFA_BASE +
+      distanceKm * TARIFA_POR_KM +
+      durationMinutes * TARIFA_POR_MINUTO;
 
     // Aplicar recargos por hora
     const hour = new Date().getHours();
-    const HORA_NOCTURNA_INICIO = parseInt(process.env.HORA_NOCTURNA_INICIO || '22');
+    const HORA_NOCTURNA_INICIO = parseInt(
+      process.env.HORA_NOCTURNA_INICIO || '22',
+    );
     const HORA_NOCTURNA_FIN = parseInt(process.env.HORA_NOCTURNA_FIN || '6');
-    const HORA_PICO_MANANA_INICIO = parseInt(process.env.HORA_PICO_MANANA_INICIO || '7');
-    const HORA_PICO_MANANA_FIN = parseInt(process.env.HORA_PICO_MANANA_FIN || '9');
-    const HORA_PICO_TARDE_INICIO = parseInt(process.env.HORA_PICO_TARDE_INICIO || '17');
-    const HORA_PICO_TARDE_FIN = parseInt(process.env.HORA_PICO_TARDE_FIN || '19');
+    const HORA_PICO_MANANA_INICIO = parseInt(
+      process.env.HORA_PICO_MANANA_INICIO || '7',
+    );
+    const HORA_PICO_MANANA_FIN = parseInt(
+      process.env.HORA_PICO_MANANA_FIN || '9',
+    );
+    const HORA_PICO_TARDE_INICIO = parseInt(
+      process.env.HORA_PICO_TARDE_INICIO || '17',
+    );
+    const HORA_PICO_TARDE_FIN = parseInt(
+      process.env.HORA_PICO_TARDE_FIN || '19',
+    );
 
     // Recargo nocturno
     if (hour >= HORA_NOCTURNA_INICIO || hour < HORA_NOCTURNA_FIN) {
-      const RECARGO_NOCTURNO = parseFloat(process.env.RECARGO_NOCTURNO || '1.2');
+      const RECARGO_NOCTURNO = parseFloat(
+        process.env.RECARGO_NOCTURNO || '1.2',
+      );
       price *= RECARGO_NOCTURNO;
     }
 
@@ -397,7 +436,9 @@ export class RidesService {
       (hour >= HORA_PICO_MANANA_INICIO && hour < HORA_PICO_MANANA_FIN) ||
       (hour >= HORA_PICO_TARDE_INICIO && hour < HORA_PICO_TARDE_FIN)
     ) {
-      const RECARGO_HORA_PICO = parseFloat(process.env.RECARGO_HORA_PICO || '1.3');
+      const RECARGO_HORA_PICO = parseFloat(
+        process.env.RECARGO_HORA_PICO || '1.3',
+      );
       price *= RECARGO_HORA_PICO;
     }
 
@@ -443,7 +484,10 @@ export class RidesService {
     });
 
     if (rides.length > 0) {
-      const totalRating = rides.reduce((sum, ride) => sum + ride.driverRating, 0);
+      const totalRating = rides.reduce(
+        (sum, ride) => sum + ride.driverRating,
+        0,
+      );
       const avgRating = totalRating / rides.length;
 
       await this.userRepository.update(driverId, {
@@ -461,7 +505,10 @@ export class RidesService {
     });
 
     if (rides.length > 0) {
-      const totalRating = rides.reduce((sum, ride) => sum + ride.passengerRating, 0);
+      const totalRating = rides.reduce(
+        (sum, ride) => sum + ride.passengerRating,
+        0,
+      );
       const avgRating = totalRating / rides.length;
 
       await this.userRepository.update(passengerId, {

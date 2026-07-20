@@ -23,9 +23,9 @@ export enum DriverStatus {
 
 // Estado de cuenta del conductor basado en saldo
 export enum DriverAccountStatus {
-  ACTIVE = 'active',      // Saldo >= 0, puede recibir viajes
-  INACTIVE = 'inactive',  // Saldo < 0, no puede recibir viajes
-  PENDING = 'pending',    // Pendiente de verificación
+  ACTIVE = 'active', // Saldo >= 0, puede recibir viajes
+  INACTIVE = 'inactive', // Saldo < 0, no puede recibir viajes
+  PENDING = 'pending', // Pendiente de verificación
 }
 
 @Entity('users')
@@ -78,7 +78,13 @@ export class User {
   })
   driverStatus: DriverStatus;
 
-  @Column({ type: 'decimal', precision: 3, scale: 2, default: 0, nullable: true })
+  @Column({
+    type: 'decimal',
+    precision: 3,
+    scale: 2,
+    default: 0,
+    nullable: true,
+  })
   driverRating: number;
 
   @Column({ default: 0, nullable: true })
@@ -87,7 +93,7 @@ export class User {
   // ========================================
   // 💰 CAMPOS DE SALDO Y ESTADO (Conductor)
   // ========================================
-  
+
   /**
    * Saldo disponible del conductor para recibir viajes
    * Se descuenta cuando completa un viaje
@@ -110,7 +116,7 @@ export class User {
   /**
    * Fecha de la última recarga
    */
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   ultima_recarga_at: Date;
 
   // Ubicación actual del conductor (para matching)
@@ -120,7 +126,7 @@ export class User {
   @Column({ type: 'decimal', precision: 11, scale: 8, nullable: true })
   currentLng: number;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   lastLocationUpdate: Date;
 
   // Campos para PASAJEROS

@@ -23,7 +23,7 @@ import { Recharge } from './payments/entities/recharge.entity';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const isDevelopment = configService.get('NODE_ENV') === 'development';
-        
+
         if (isDevelopment) {
           // Usar SQLite en desarrollo
           return {
@@ -47,9 +47,10 @@ import { Recharge } from './payments/entities/recharge.entity';
           entities: [User, Ride, Payment, Recharge],
           synchronize: true, // ⚠️ Solo en desarrollo! En producción usar migrations
           logging: configService.get('NODE_ENV') === 'development',
-          ssl: configService.get('NODE_ENV') === 'production' 
-            ? { rejectUnauthorized: false }
-            : false,
+          ssl:
+            configService.get('NODE_ENV') === 'production'
+              ? { rejectUnauthorized: false }
+              : false,
         };
 
         if (databaseUrl) {
@@ -58,7 +59,8 @@ import { Recharge } from './payments/entities/recharge.entity';
           config.host = configService.get('DATABASE_HOST') || 'localhost';
           config.port = parseInt(configService.get('DATABASE_PORT') || '5432');
           config.username = configService.get('DATABASE_USER') || 'postgres';
-          config.password = configService.get('DATABASE_PASSWORD') || 'postgres';
+          config.password =
+            configService.get('DATABASE_PASSWORD') || 'postgres';
           config.database = configService.get('DATABASE_NAME') || 'lleevameq';
         }
 

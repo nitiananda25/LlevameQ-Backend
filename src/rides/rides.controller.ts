@@ -30,7 +30,10 @@ export class RidesController {
    * GET /api/rides - Obtener viajes del usuario
    */
   @Get()
-  async getUserRides(@Request() req, @Query('role') role: 'passenger' | 'driver') {
+  async getUserRides(
+    @Request() req,
+    @Query('role') role: 'passenger' | 'driver',
+  ) {
     const userId = req.user.id;
     const userRole = role || req.user.role;
     return this.ridesService.getUserRides(userId, userRole);

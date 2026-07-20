@@ -1,13 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User, DriverStatus, UserRole, DriverAccountStatus } from '../users/entities/user.entity';
+import {
+  User,
+  DriverStatus,
+  UserRole,
+  DriverAccountStatus,
+} from '../users/entities/user.entity';
 import { Ride, RideStatus } from './entities/ride.entity';
 
 @Injectable()
 export class MatchingService {
   private readonly logger = new Logger(MatchingService.name);
-  private readonly MATCHING_RADIUS_KM = parseFloat(process.env.MATCHING_RADIUS_KM || '5');
+  private readonly MATCHING_RADIUS_KM = parseFloat(
+    process.env.MATCHING_RADIUS_KM || '5',
+  );
 
   constructor(
     @InjectRepository(User)
@@ -21,7 +28,9 @@ export class MatchingService {
    * Solo retorna conductores con estado_cuenta = ACTIVE (saldo >= 0)
    */
   async findAvailableDrivers(ride: Ride): Promise<User[]> {
-    this.logger.log(`Buscando conductores cerca de (${ride.originLat}, ${ride.originLng})`);
+    this.logger.log(
+      `Buscando conductores cerca de (${ride.originLat}, ${ride.originLng})`,
+    );
 
     // Obtener todos los conductores online Y con cuenta activa (saldo >= 0)
     const onlineDrivers = await this.userRepository.find({
@@ -34,7 +43,9 @@ export class MatchingService {
     });
 
     if (onlineDrivers.length === 0) {
-      this.logger.warn('No hay conductores disponibles (ninguno tiene saldo suficiente)');
+      this.logger.warn(
+        'No hay conductores disponibles (ninguno tiene saldo suficiente)',
+      );
       return [];
     }
 

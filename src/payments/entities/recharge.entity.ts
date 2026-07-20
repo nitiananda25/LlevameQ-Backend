@@ -1,12 +1,12 @@
 // 📁 UBICACIÓN: lleevameq-backend/src/payments/entities/recharge.entity.ts
 // 📋 Historial de Recargas - Registro de dinero que el conductor envía a la plataforma
 
-import { 
-  Entity, 
-  PrimaryGeneratedColumn, 
-  Column, 
-  CreateDateColumn, 
-  ManyToOne 
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 
@@ -20,9 +20,9 @@ export enum RechargeMethod {
 
 // Estado de la recarga
 export enum RechargeStatus {
-  PENDING = 'pending',    // Pendiente de verificación
+  PENDING = 'pending', // Pendiente de verificación
   COMPLETED = 'completed', // Verificada y aplicada
-  REJECTED = 'rejected',   // Rechazada
+  REJECTED = 'rejected', // Rechazada
   CANCELLED = 'cancelled', // Cancelada
 }
 
@@ -67,7 +67,7 @@ export class Recharge {
   createdAt: Date;
 
   // Fecha de verificación/aprobación
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   verifiedAt: Date;
 
   // Admin que verificó (si aplica)
